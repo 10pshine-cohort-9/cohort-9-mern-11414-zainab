@@ -1,0 +1,75 @@
+:root {
+  --paper: #f8f2e4;
+  --paper-card: #ffffff;
+  --line: #e8dfc9;
+
+  --ink-900: #262220;
+  --ink-700: #52483f;
+  --ink-500: #8a7f72;
+
+  --accent: #6fb6de;
+  --accent-hover: #57a2cc;
+  --accent-ink: #1c2a33;
+
+  --sticky-blue: #b7e3f2;
+  --sticky-blue-fold: #98cfe4;
+  --sticky-pink: #f6bccd;
+  --sticky-pink-fold: #e8a1b6;
+  --sticky-yellow: #f5df8e;
+  --sticky-yellow-fold: #e0c56c;
+  --sticky-green: #bfe6b8;
+  --sticky-green-fold: #a3d199;
+
+  --shadow-card: 0 1px 2px rgba(38, 34, 32, 0.06), 0 10px 24px rgba(38, 34, 32, 0.08);
+  --shadow-note: 0 6px 14px rgba(38, 34, 32, 0.14);
+
+  --font-serif: "Times New Roman", Times, serif;
+  --font-sans: "Times New Roman", Times, serif;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink-900);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+input {
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--accent-hover);
+}

@@ -1,0 +1,109 @@
+.editor-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 60px;
+}
+
+.editor-shell {
+  width: 100%;
+  max-width: 760px;
+  background: var(--paper-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.editor-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.editor-top .back-link {
+  border: none;
+  background: transparent;
+  color: var(--ink-500);
+  font-size: 0.85rem;
+}
+
+.editor-top .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.editor-top .actions button {
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.editor-top .btn-cancel {
+  background: transparent;
+  color: var(--ink-700);
+  border-color: var(--line);
+}
+
+.editor-top .btn-save {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.editor-top .btn-save:hover {
+  background: var(--accent-hover);
+}
+
+.editor-top .btn-save:disabled {
+  opacity: 0.6;
+}
+
+.editor-title-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  padding: 24px 24px 0;
+  background: transparent;
+  color: var(--ink-900);
+}
+
+.editor-title-input::placeholder {
+  color: var(--ink-500);
+}
+
+.editor-quill-wrap {
+  padding: 16px 24px 28px;
+}
+
+.editor-quill-wrap .ql-toolbar.ql-snow {
+  border: 1px solid var(--line);
+  border-radius: 8px 8px 0 0;
+  background: var(--paper);
+}
+
+.editor-quill-wrap .ql-container.ql-snow {
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  min-height: 320px;
+}
+
+.editor-quill-wrap .ql-editor {
+  min-height: 320px;
+  color: var(--ink-900);
+}
+
+.editor-foot {
+  padding: 10px 24px 18px;
+  font-size: 0.75rem;
+  color: var(--ink-500);
+}

@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Env files
+.env
+.env.local
+config.env
+*.env
+!config.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Editor/OS
+.DS_Store
+.vscode/
+*.suo
+
+# Claude Code worktree data
+.claude/
