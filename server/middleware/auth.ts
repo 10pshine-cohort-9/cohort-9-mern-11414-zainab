@@ -1,3 +1,13 @@
+/*
+Flow:
+Request comes in
+Check for Authorization header
+Extract JWT token
+Verify token
+If valid: get userId -> attach it to request -> continue to controller
+If invalid/missing:return 401 Unauthorized
+*/
+
 import { Request, Response, NextFunction } from "express"
 import { verifyToken } from "../utils/jwt"
 
