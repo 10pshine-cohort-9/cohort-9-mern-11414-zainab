@@ -14,7 +14,7 @@ interface NoteAttributes {
 type NoteCreationAttributes = Optional<NoteAttributes, "id"> // ID is optional because the db generates it
 
 export class Note extends Model<NoteAttributes, NoteCreationAttributes> implements NoteAttributes {
-    // Creates the Sequelize model representing a Note
+    // Creates the Sequelize model
     declare id: number
     declare title: string
     declare content: string
