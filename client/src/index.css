@@ -1,3 +1,9 @@
+/*
+Global CSS loads
+Define reusable colors, fonts, shadows
+Set basic styles for the whole page
+Components inherit these styles
+*/
 :root {
   --paper: #f8f2e4;
   --paper-card: #ffffff;
