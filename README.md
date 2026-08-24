@@ -21,7 +21,7 @@ A full-stack notes application. Built as a 10 Pearls internship project.
 ```
 10 Pearls Project/
 ├── design/                    # Reference mockups (login/signup, dashboard)
-├── server/
+├── backend/
 │   ├── server.ts              # Entry point — loads env, connects DB, starts Express
 │   ├── app.ts                 # Express app, middleware, route mounting
 │   ├── config/
@@ -40,7 +40,7 @@ A full-stack notes application. Built as a 10 Pearls internship project.
 │   │   ├── authRoutes.ts
 │   │   └── noteRoutes.ts
 │   └── test/                  # Mocha/Chai backend tests (+ setup.ts for test env vars)
-├── client/
+├── frontend/
 │   └── src/
 │       ├── pages/                 # Each page ships with a matching .css file
 │       │   ├── Auth.tsx           # Combined login/signup (+ Auth.test.tsx)
@@ -82,7 +82,7 @@ Authenticated requests send `Authorization: Bearer <token>`.
 ### Backend
 
 ```bash
-cd server
+cd backend
 npm install
 cp config.env.example config.env
 # fill in DB_* and JWT_SECRET in config.env
@@ -92,7 +92,7 @@ npm run dev
 ### Frontend
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
@@ -102,6 +102,6 @@ Backend runs on `http://localhost:8000`, frontend dev server on `http://localhos
 ### Testing
 
 ```bash
-cd server && npm test    # Mocha/Chai
-cd client && npm test    # Jest
+cd backend && npm test    # Mocha/Chai
+cd frontend && npm test   # Jest
 ```
