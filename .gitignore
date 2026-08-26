@@ -12,6 +12,9 @@ dist-ssr/
 *.env
 !config.env.example
 
+# DB certs (local dev only, tied to a personal cloud DB instance)
+backend/certs/
+
 # Logs
 *.log
 npm-debug.log*

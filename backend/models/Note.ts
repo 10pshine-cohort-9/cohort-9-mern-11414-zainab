@@ -28,7 +28,9 @@ Note.init(
     {
         id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         title: { type: DataTypes.STRING, allowNull: false, defaultValue: "Untitled note" },
-        content: { type: DataTypes.TEXT("long"), allowNull: false, defaultValue: "" },
+        // MySQL doesn't allow a DEFAULT value on TEXT columns — the controller
+        // always supplies "" for a blank note, so this is enforced app-side instead.
+        content: { type: DataTypes.TEXT("long"), allowNull: false },
         userId: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
