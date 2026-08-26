@@ -9,7 +9,7 @@ const QUILL_MODULES = {
   toolbar: [
     ["bold", "italic", "underline"],
     [{ header: 2 }, { header: 3 }],
-    [{ list: "ordered" }, { list: "bullet" }],
+    [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
     ["blockquote"],
     ["clean"],
   ],

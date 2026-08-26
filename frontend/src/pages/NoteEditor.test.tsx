@@ -122,3 +122,86 @@ describe("NoteEditor formatting toolbar", () => {
     expect(editor.innerHTML).toContain("<u>")
   })
 })
+
+describe("NoteEditor list and to-do toolbar buttons", () => {
+  it("renders ordered, bullet, and checklist buttons", () => {
+    const { container } = renderNewNoteEditor()
+    expect(container.querySelector('.ql-list[value="ordered"]')).toBeTruthy()
+    expect(container.querySelector('.ql-list[value="bullet"]')).toBeTruthy()
+    expect(container.querySelector('.ql-list[value="check"]')).toBeTruthy()
+  })
+
+  it("toggles a bullet list on and off on the selected line", () => {
+    const { container } = renderNewNoteEditor()
+    typeIntoEditor(container, "Milk")
+    selectAllEditorText(container)
+
+    const bullet = container.querySelector('.ql-list[value="bullet"]') as HTMLButtonElement
+    const editor = container.querySelector(".ql-editor") as HTMLElement
+
+    fireEvent.click(bullet)
+    expect(bullet.className).toContain("ql-active")
+    expect(editor.querySelector('li[data-list="bullet"]')).toBeTruthy()
+
+    selectAllEditorText(container)
+    fireEvent.click(bullet)
+    expect(bullet.className).not.toContain("ql-active")
+    expect(editor.querySelector("li")).toBeFalsy()
+  })
+
+  it("toggles an ordered list on and off on the selected line", () => {
+    const { container } = renderNewNoteEditor()
+    typeIntoEditor(container, "Eggs")
+    selectAllEditorText(container)
+
+    const ordered = container.querySelector('.ql-list[value="ordered"]') as HTMLButtonElement
+    const editor = container.querySelector(".ql-editor") as HTMLElement
+
+    fireEvent.click(ordered)
+    expect(ordered.className).toContain("ql-active")
+    expect(editor.querySelector('li[data-list="ordered"]')).toBeTruthy()
+
+    selectAllEditorText(container)
+    fireEvent.click(ordered)
+    expect(ordered.className).not.toContain("ql-active")
+    expect(editor.querySelector("li")).toBeFalsy()
+  })
+
+  it("turns the selected line into an unchecked to-do item via the toolbar", () => {
+    const { container } = renderNewNoteEditor()
+    typeIntoEditor(container, "Buy groceries")
+    selectAllEditorText(container)
+
+    const check = container.querySelector('.ql-list[value="check"]') as HTMLButtonElement
+    const editor = container.querySelector(".ql-editor") as HTMLElement
+
+    fireEvent.click(check)
+    // Note: Quill never applies ql-active to the "check" button itself (even
+    // in a real browser) — it's a distinct action, not a single format value
+    // to match against. Confirmed by hand; only the resulting DOM matters here.
+    expect(editor.querySelector('li[data-list="unchecked"]')).toBeTruthy()
+  })
+
+  it("renders a struck-through, muted style for a checked to-do item", () => {
+    const { container } = renderNewNoteEditor()
+    typeIntoEditor(container, "Buy groceries")
+    selectAllEditorText(container)
+    fireEvent.click(container.querySelector('.ql-list[value="check"]') as HTMLButtonElement)
+
+    // Mark it done the same way Quill's own checkbox click does: format the
+    // line to "checked" (jsdom has no real layout, so we can't click the
+    // ::before checkbox glyph by pixel position like a real browser).
+    act(() => {
+      const quill = getQuillInstance(container)
+      quill.formatLine(0, 1, "list", "checked")
+    })
+
+    // NoteEditor.css is stubbed out by identity-obj-proxy in this test
+    // environment (see jest.config.cjs), so the actual line-through rule
+    // can't be observed via getComputedStyle here — what's verifiable, and
+    // what the CSS in NoteEditor.css keys off, is that the item carries
+    // data-list="checked".
+    const editor = container.querySelector(".ql-editor") as HTMLElement
+    expect(editor.querySelector('li[data-list="checked"]')).toBeTruthy()
+  })
+})
