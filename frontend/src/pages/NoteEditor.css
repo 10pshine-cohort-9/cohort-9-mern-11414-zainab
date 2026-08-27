@@ -88,6 +88,42 @@
   background: var(--paper);
 }
 
+/* Bold/Italic/Underline as square, selectable buttons with a golden "active" state */
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-bold,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-italic,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-underline {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--paper-card);
+}
+
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-bold:hover,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-italic:hover,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-underline:hover {
+  border-color: var(--ink-500);
+}
+
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-bold.ql-active,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-italic.ql-active,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-underline.ql-active {
+  background: var(--sticky-yellow-fold);
+  border-color: var(--sticky-yellow-fold);
+}
+
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-bold.ql-active .ql-stroke,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-italic.ql-active .ql-stroke,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-underline.ql-active .ql-stroke {
+  stroke: var(--ink-900);
+}
+
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-bold.ql-active .ql-fill,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-italic.ql-active .ql-fill,
+.editor-quill-wrap .ql-toolbar.ql-snow .ql-underline.ql-active .ql-fill {
+  fill: var(--ink-900);
+}
+
 .editor-quill-wrap .ql-container.ql-snow {
   border: 1px solid var(--line);
   border-top: none;
