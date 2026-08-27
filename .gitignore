@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+dist-ssr/
+
+# Environment files
+.env
+.env.local
+*.env
+!config.env.example
+
+# DB certs (local dev only, tied to a personal cloud DB instance)
+backend/certs/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Editor/OS
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.sw?
+*.ntvs*
+*.njsproj
+*.sln
+
+# Claude Code
+.claude/

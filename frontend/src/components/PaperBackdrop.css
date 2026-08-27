@@ -1,0 +1,105 @@
+.paper-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(38, 34, 32, 0.05) 1px, transparent 0) 0 0 / 22px 22px,
+    var(--paper);
+}
+
+.paper-backdrop__letter {
+  position: absolute;
+  font-family: "Times New Roman", Times, serif;
+  color: var(--ink-900);
+  opacity: 0.1;
+  line-height: 1;
+}
+
+.paper-backdrop__letter--1 { top: 10%; left: 7%; font-size: 4.2rem; transform: rotate(-12deg); }
+.paper-backdrop__letter--2 { top: 20%; right: 10%; font-size: 3.2rem; transform: rotate(8deg); }
+.paper-backdrop__letter--3 { bottom: 24%; left: 5%; font-size: 3.6rem; transform: rotate(5deg); }
+.paper-backdrop__letter--4 { bottom: 14%; left: 46%; font-size: 2.8rem; transform: rotate(-6deg); }
+.paper-backdrop__letter--5 { top: 48%; right: 6%; font-size: 3.4rem; transform: rotate(10deg); }
+.paper-backdrop__letter--6 { top: 34%; left: 30%; font-size: 2.6rem; transform: rotate(-4deg); }
+.paper-backdrop__letter--7 { bottom: 8%; right: 30%; font-size: 3rem; transform: rotate(7deg); }
+
+/* ---- CSS-drawn pencil: pinned to bottom-right corner, tip pivoting inward ---- */
+.pencil {
+  position: fixed;
+  bottom: -8px;
+  right: 26px;
+  width: 42px;
+  height: 300px;
+  transform: rotate(-42deg);
+  transform-origin: bottom center;
+  opacity: 0.16;
+}
+
+.pencil__point {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 14px solid var(--ink-900);
+}
+
+.pencil__wood {
+  position: absolute;
+  top: 14px;
+  left: 3px;
+  width: 36px;
+  height: 30px;
+  background: #e8cfa0;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  border-bottom: 2px solid var(--ink-900);
+}
+
+.pencil__shaft {
+  position: absolute;
+  top: 44px;
+  left: 3px;
+  width: 36px;
+  height: 190px;
+  background: var(--sticky-yellow);
+  border-left: 2px solid var(--ink-900);
+  border-right: 2px solid var(--ink-900);
+}
+
+.pencil__ferrule {
+  position: absolute;
+  top: 234px;
+  left: 3px;
+  width: 36px;
+  height: 24px;
+  background: linear-gradient(90deg, #cfcfcf, #f2f2f2 45%, #b8b8b8);
+  border: 2px solid var(--ink-900);
+}
+
+.pencil__eraser {
+  position: absolute;
+  top: 256px;
+  left: 3px;
+  width: 36px;
+  height: 34px;
+  background: var(--sticky-pink);
+  border: 2px solid var(--ink-900);
+  border-radius: 0 0 6px 6px;
+}
+
+@media (max-width: 720px) {
+  .paper-backdrop__letter--2,
+  .paper-backdrop__letter--5,
+  .paper-backdrop__letter--6 {
+    display: none;
+  }
+  .pencil {
+    width: 32px;
+    height: 220px;
+    opacity: 0.13;
+  }
+}
