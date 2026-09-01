@@ -70,3 +70,30 @@ export const getProfile = async (req: Request, res: Response, next: NextFunction
         next(err)
     }
 }
+
+export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { currentPassword, newPassword } = req.body
+
+        if (!currentPassword || !newPassword) {
+            throw new AppError("Current and new password are required", 400)
+        }
+        if (newPassword.length < 6) {
+            throw new AppError("New password must be at least 6 characters", 400)
+        }
+
+        const user = await User.findByPk(req.userId)
+        if (!user) throw new AppError("User not found", 404)
+
+        const match = await bcrypt.compare(currentPassword, user.password)
+        if (!match) throw new AppError("Current password is incorrect", 401)
+
+        user.password = await bcrypt.hash(newPassword, SALT_ROUNDS)
+        await user.save()
+
+        logger.info({ userId: user.id }, "User changed password")
+        res.json({ message: "Password updated" })
+    } catch (err) {
+        next(err)
+    }
+}

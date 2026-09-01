@@ -4,6 +4,10 @@ import request from "supertest"
 import bcrypt from "bcrypt"
 import { app } from "../app"
 import { User } from "../models/User"
+import { signToken } from "../utils/jwt"
+
+process.env.JWT_SECRET = process.env.JWT_SECRET || "test-secret"
+const authHeader = `Bearer ${signToken({ userId: 1 })}`
 
 describe("Auth routes", () => {
     afterEach(() => sinon.restore())
@@ -86,6 +90,60 @@ describe("Auth routes", () => {
 
             expect(res.status).to.equal(200)
             expect(res.body).to.have.property("token")
+        })
+    })
+
+    describe("PUT /api/auth/password", () => {
+        it("rejects requests without a token", async () => {
+            const res = await request(app)
+                .put("/api/auth/password")
+                .send({ currentPassword: "old-password", newPassword: "new-password" })
+
+            expect(res.status).to.equal(401)
+        })
+
+        it("rejects a request missing required fields", async () => {
+            const res = await request(app)
+                .put("/api/auth/password")
+                .set("Authorization", authHeader)
+                .send({ currentPassword: "old-password" })
+
+            expect(res.status).to.equal(400)
+        })
+
+        it("rejects a new password shorter than 6 characters", async () => {
+            const res = await request(app)
+                .put("/api/auth/password")
+                .set("Authorization", authHeader)
+                .send({ currentPassword: "old-password", newPassword: "123" })
+
+            expect(res.status).to.equal(400)
+        })
+
+        it("rejects an incorrect current password", async () => {
+            const hashed = await bcrypt.hash("correct-password", 10)
+            sinon.stub(User, "findByPk").resolves({ id: 1, password: hashed } as any)
+
+            const res = await request(app)
+                .put("/api/auth/password")
+                .set("Authorization", authHeader)
+                .send({ currentPassword: "wrong-password", newPassword: "new-password" })
+
+            expect(res.status).to.equal(401)
+        })
+
+        it("updates the password when the current one is correct", async () => {
+            const hashed = await bcrypt.hash("correct-password", 10)
+            const save = sinon.stub().resolves()
+            sinon.stub(User, "findByPk").resolves({ id: 1, password: hashed, save } as any)
+
+            const res = await request(app)
+                .put("/api/auth/password")
+                .set("Authorization", authHeader)
+                .send({ currentPassword: "correct-password", newPassword: "new-password" })
+
+            expect(res.status).to.equal(200)
+            expect(save.calledOnce).to.equal(true)
         })
     })
 })
