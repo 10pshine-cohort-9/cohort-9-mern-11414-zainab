@@ -58,7 +58,10 @@
 }
 
 .profile-error {
-  background: rgba(179, 73, 47, 0.1);
+  /* Solid (non-alpha) colors: contrast tools that don't resolve
+     alpha-over-parent-background would otherwise compare this text
+     against the literal rgba() color, which used to be identical red. */
+  background: #fbeae5;
   color: #7a2f1c;
   border-radius: 8px;
   padding: 9px 12px;
