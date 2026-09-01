@@ -18,7 +18,7 @@ describe("excerpt", () => {
   it("truncates long content with an ellipsis", () => {
     const long = "<p>" + "a".repeat(200) + "</p>"
     const result = excerpt(long, 140)
-    expect(result.length).toBe(141)
+    expect(result).toHaveLength(141)
     expect(result.endsWith("…")).toBe(true)
   })
 })
