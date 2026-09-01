@@ -4,7 +4,6 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Auth from "./pages/Auth"
 import Dashboard from "./pages/Dashboard"
 import NoteEditor from "./pages/NoteEditor"
-import Profile from "./pages/Profile"
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/notes/new" element={<NoteEditor />} />
           <Route path="/notes/:id" element={<NoteEditor />} />
-          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>
