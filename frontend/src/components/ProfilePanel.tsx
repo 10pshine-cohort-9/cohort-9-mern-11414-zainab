@@ -9,7 +9,13 @@ interface FullProfile extends AuthUser {
 }
 
 interface ProfilePanelProps {
-  user: AuthUser | null
+  readonly user: AuthUser | null
+}
+
+function memberSinceLabel(loading: boolean, createdAt: string | undefined): string {
+  if (loading) return "…"
+  if (createdAt) return formatDate(createdAt)
+  return "—"
 }
 
 export default function ProfilePanel({ user }: ProfilePanelProps) {
@@ -72,7 +78,7 @@ export default function ProfilePanel({ user }: ProfilePanelProps) {
         </div>
         <div className="profile-row">
           <span>Member since</span>
-          <span>{loading ? "…" : profile?.createdAt ? formatDate(profile.createdAt) : "—"}</span>
+          <span>{memberSinceLabel(loading, profile?.createdAt)}</span>
         </div>
       </div>
 

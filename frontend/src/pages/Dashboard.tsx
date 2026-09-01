@@ -54,6 +54,41 @@ export default function Dashboard() {
     }
   }
 
+  let notesArea
+  if (loading) {
+    notesArea = <p>Loading…</p>
+  } else if (filteredNotes.length === 0) {
+    notesArea = (
+      <div className="empty-state">
+        <p>{notes.length === 0 ? "No notes yet." : "No notes match your search."}</p>
+        {notes.length === 0 && (
+          <button className="btn-new" onClick={() => navigate("/notes/new")}>
+            + New note
+          </button>
+        )}
+      </div>
+    )
+  } else {
+    notesArea = (
+      <div className="note-grid">
+        {filteredNotes.map((note, i) => (
+          <button
+            key={note.id}
+            className={`note-card note-card--${STICKY_COLORS[i % STICKY_COLORS.length]}`}
+            onClick={() => navigate(`/notes/${note.id}`)}
+          >
+            <button className="delete-btn" onClick={(e) => handleDelete(e, note.id)} title="Delete note">
+              ✕
+            </button>
+            <h3>{note.title}</h3>
+            <p>{excerpt(note.content) || "Empty note"}</p>
+            <div className="note-meta">Edited {formatDate(note.updatedAt)}</div>
+          </button>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -117,35 +152,7 @@ export default function Dashboard() {
               <p className="note-count">{notes.length} notes</p>
             </div>
 
-            {loading ? (
-              <p>Loading…</p>
-            ) : filteredNotes.length === 0 ? (
-              <div className="empty-state">
-                <p>{notes.length === 0 ? "No notes yet." : "No notes match your search."}</p>
-                {notes.length === 0 && (
-                  <button className="btn-new" onClick={() => navigate("/notes/new")}>
-                    + New note
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="note-grid">
-                {filteredNotes.map((note, i) => (
-                  <button
-                    key={note.id}
-                    className={`note-card note-card--${STICKY_COLORS[i % STICKY_COLORS.length]}`}
-                    onClick={() => navigate(`/notes/${note.id}`)}
-                  >
-                    <button className="delete-btn" onClick={(e) => handleDelete(e, note.id)} title="Delete note">
-                      ✕
-                    </button>
-                    <h3>{note.title}</h3>
-                    <p>{excerpt(note.content) || "Empty note"}</p>
-                    <div className="note-meta">Edited {formatDate(note.updatedAt)}</div>
-                  </button>
-                ))}
-              </div>
-            )}
+            {notesArea}
           </>
         )}
       </div>
