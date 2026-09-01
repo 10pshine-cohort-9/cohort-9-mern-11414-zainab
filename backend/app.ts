@@ -6,7 +6,11 @@ import { notFoundHandler, errorHandler } from "./middleware/errorHandler" // Imp
 
 export const app = express() // Creates and exports the Express application.
 
-app.use(cors()) // Enables CORS for incoming requests.
+app.disable("x-powered-by") // Don't advertise the framework/version to callers.
+
+// Only the configured frontend origin may call this API — a bare cors()
+// would default to allowing any origin (Access-Control-Allow-Origin: *).
+app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:5173" }))
 app.use(express.json()) // Allows Express to parse JSON request bodies.
 app.use(express.urlencoded({ extended: true })) // Allows Express to parse URL-encoded request data.
 app.use(pinoHttp({ logger })) // Logs HTTP requests and responses using Pino.
