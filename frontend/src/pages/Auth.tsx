@@ -20,6 +20,15 @@ export default function Auth() {
     setError("")
   }
 
+  let submitLabel: string
+  if (submitting) {
+    submitLabel = "Please wait…"
+  } else if (mode === "login") {
+    submitLabel = "Log in"
+  } else {
+    submitLabel = "Create account"
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError("")
@@ -103,7 +112,7 @@ export default function Auth() {
           </div>
 
           <button type="submit" className="auth-submit" disabled={submitting}>
-            {submitting ? "Please wait…" : mode === "login" ? "Log in" : "Create account"}
+            {submitLabel}
           </button>
         </form>
       </div>

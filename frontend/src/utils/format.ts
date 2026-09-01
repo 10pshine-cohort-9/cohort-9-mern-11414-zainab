@@ -1,4 +1,7 @@
-export const stripHtml = (html: string): string => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+// Excludes "<" from the tag-body class (not just ">") so the engine can't
+// treat an unmatched "<" as ambiguous overlap with the outer tag markers —
+// keeps this provably linear instead of merely "usually fine in practice".
+export const stripHtml = (html: string): string => html.replace(/<[^<>]*>/g, " ").replace(/\s+/g, " ").trim()
 
 export const excerpt = (html: string, length = 140): string => {
     const text = stripHtml(html)
