@@ -2,9 +2,8 @@
 
 ## Overview
 
-A full-stack notes application. Built as a 10 Pearls internship project.
-
-> **Status: work in progress.** This README describes what's implemented. In particular: no MySQL instance has been available in the dev environment yet, so while the backend has 12/12 passing unit tests (with the database mocked), it has not been run against a real database.
+A full-stack notes application with user authentication, rich-text notes,
+and per-user data isolation. Built as a 10 Pearls internship project.
 
 ## Tech Stack
 
@@ -15,6 +14,20 @@ A full-stack notes application. Built as a 10 Pearls internship project.
 | Database | MySQL with Sequelize |
 | Logging | Pino |
 | Testing | Mocha, Chai, Supertest, Sinon (backend) · Jest, Testing Library (frontend) |
+| Code Quality | SonarCloud |
+
+## Features
+
+- **Auth**: sign up, log in, log out, JWT-based sessions, bcrypt-hashed passwords
+- **Notes**: create, edit, delete, rich-text editing (bold/italic/underline,
+  headings, ordered/bullet/checklist lists, blockquote), search/filter
+- **Global exception handling**: centralized error middleware, all errors
+  logged via Pino, meaningful HTTP status codes
+- **Logging**: Pino throughout — HTTP request/response logging, user
+  activity (signup, login, note CRUD), and errors
+- **MySQL via Sequelize**: relational schema (`users` ⟶ `notes`, one-to-many),
+  verified against a live managed MySQL instance (Aiven, over TLS) — not
+  just against mocks
 
 ## Project Structure
 
@@ -25,7 +38,7 @@ A full-stack notes application. Built as a 10 Pearls internship project.
 │   ├── server.ts              # Entry point — loads env, connects DB, starts Express
 │   ├── app.ts                 # Express app, middleware, route mounting
 │   ├── config/
-│   │   ├── db.ts              # Sequelize connection
+│   │   ├── db.ts              # Sequelize connection (TLS-aware for managed MySQL)
 │   │   └── logger.ts          # Pino logger
 │   ├── middleware/
 │   │   ├── auth.ts            # JWT auth middleware
@@ -44,16 +57,17 @@ A full-stack notes application. Built as a 10 Pearls internship project.
 │   └── src/
 │       ├── pages/                 # Each page ships with a matching .css file
 │       │   ├── Auth.tsx           # Combined login/signup (+ Auth.test.tsx)
-│       │   ├── Dashboard.tsx      # Notes list, search/filter
-│       │   ├── NoteEditor.tsx     # Create/edit a note
-│       │   └── Profile.tsx
+│       │   ├── Dashboard.tsx      # Notes list, search/filter, profile view toggle
+│       │   └── NoteEditor.tsx     # Create/edit a note (+ NoteEditor.test.tsx)
 │       ├── components/
 │       │   ├── PaperBackdrop.tsx  # Pencil background
-│       │   └── ProtectedRoute.tsx
+│       │   ├── ProtectedRoute.tsx
+│       │   └── ProfilePanel.tsx   # Inline profile view (name/email/creation date)
 │       └── utils/
 │           ├── api.ts             # Axios instance with auth header
 │           ├── auth.ts            # Session storage helpers
 │           └── format.ts          # Date/HTML-excerpt helpers (+ format.test.ts)
+├── sonar-project.properties    # SonarCloud scanner config
 └── README.md
 ```
 
@@ -77,7 +91,7 @@ Authenticated requests send `Authorization: Bearer <token>`.
 ### Prerequisites
 
 - Node.js v18+
-- A running MySQL instance
+- A running MySQL instance (local, or a managed provider like Aiven)
 
 ### Backend
 
@@ -86,6 +100,8 @@ cd backend
 npm install
 cp config.env.example config.env
 # fill in DB_* and JWT_SECRET in config.env
+# CORS_ORIGIN defaults to the Vite dev server (http://localhost:5173)
+# DB_SSL_CA is only needed for managed MySQL providers that require TLS
 npm run dev
 ```
 
@@ -102,6 +118,20 @@ Backend runs on `http://localhost:8000`, frontend dev server on `http://localhos
 ### Testing
 
 ```bash
-cd backend && npm test    # Mocha/Chai
-cd frontend && npm test   # Jest
+cd backend && npm test    # Mocha/Chai — 12/12 passing
+cd frontend && npm test   # Jest — 14/14 passing
 ```
+
+### Code Quality
+
+Analyzed with SonarCloud (`sonar-project.properties`). Run manually via
+the scanner-for-npm; see the project's SonarCloud dashboard for the
+current report.
+
+## Status
+
+Core app (auth, notes CRUD, rich text, logging, exception handling,
+MySQL — verified live) is merged. Additional work — a checklist/to-do
+note format, an inline profile panel with change-password support, and
+CORS/security hardening — is complete and passing tests, currently in
+open pull requests awaiting review.
