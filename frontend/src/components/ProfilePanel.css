@@ -58,11 +58,10 @@
 }
 
 .profile-error {
-  /* Solid (non-alpha) colors: contrast tools that don't resolve
-     alpha-over-parent-background would otherwise compare this text
-     against the literal rgba() color, which used to be identical red. */
-  background: #fbeae5;
-  color: #7a2f1c;
+  /* Same color pair as .auth-error in Auth.css, which SonarCloud has
+     never flagged — reusing a proven-passing pair instead of a new one. */
+  background: #fbe7e1;
+  color: #92351f;
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 0.85rem;
