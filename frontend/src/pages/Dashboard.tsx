@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { api } from "../utils/api"
 import { getUser, clearSession } from "../utils/auth"
 import { excerpt, formatDate, greeting } from "../utils/format"
+import ProfilePanel from "../components/ProfilePanel"
 import "./Dashboard.css"
 
 interface Note {
@@ -20,6 +21,7 @@ export default function Dashboard() {
   const [notes, setNotes] = useState<Note[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState("")
+  const [view, setView] = useState<"notes" | "profile">("notes")
 
   useEffect(() => {
     api
@@ -52,12 +54,55 @@ export default function Dashboard() {
     }
   }
 
+  let notesArea
+  if (loading) {
+    notesArea = <p>Loading…</p>
+  } else if (filteredNotes.length === 0) {
+    notesArea = (
+      <div className="empty-state">
+        <p>{notes.length === 0 ? "No notes yet." : "No notes match your search."}</p>
+        {notes.length === 0 && (
+          <button className="btn-new" onClick={() => navigate("/notes/new")}>
+            + New note
+          </button>
+        )}
+      </div>
+    )
+  } else {
+    notesArea = (
+      <div className="note-grid">
+        {filteredNotes.map((note, i) => (
+          <button
+            key={note.id}
+            className={`note-card note-card--${STICKY_COLORS[i % STICKY_COLORS.length]}`}
+            onClick={() => navigate(`/notes/${note.id}`)}
+          >
+            <button className="delete-btn" onClick={(e) => handleDelete(e, note.id)} title="Delete note">
+              ✕
+            </button>
+            <h3>{note.title}</h3>
+            <p>{excerpt(note.content) || "Empty note"}</p>
+            <div className="note-meta">Edited {formatDate(note.updatedAt)}</div>
+          </button>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">Pearls Notes</div>
-        <button className="nav-item active">All notes</button>
-        <button className="nav-item" onClick={() => navigate("/profile")}>
+        <button
+          className={`nav-item ${view === "notes" ? "active" : ""}`}
+          onClick={() => setView("notes")}
+        >
+          All notes
+        </button>
+        <button
+          className={`nav-item ${view === "profile" ? "active" : ""}`}
+          onClick={() => setView("profile")}
+        >
           Profile
         </button>
         <div className="sidebar-foot">
@@ -68,58 +113,47 @@ export default function Dashboard() {
 
       <div className="main">
         <div className="topbar">
-          <div className="search-box">
-            <span>⌕</span>
-            <input
-              placeholder="Search notes"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <button onClick={handleLogout} className="nav-item" style={{ width: "auto" }}>
-            Log out
-          </button>
-          <button className="btn-new" onClick={() => navigate("/notes/new")}>
-            + New note
-          </button>
-        </div>
-
-        <div className="main-head">
-          <p className="eyebrow">
-            {greeting()}, {user?.name}
-          </p>
-          <h2>Your notes</h2>
-          <p className="note-count">{notes.length} notes</p>
-        </div>
-
-        {loading ? (
-          <p>Loading…</p>
-        ) : filteredNotes.length === 0 ? (
-          <div className="empty-state">
-            <p>{notes.length === 0 ? "No notes yet." : "No notes match your search."}</p>
-            {notes.length === 0 && (
+          {view === "notes" ? (
+            <>
+              <div className="search-box">
+                <span>⌕</span>
+                <input
+                  placeholder="Search notes"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+              <button onClick={handleLogout} className="nav-item" style={{ width: "auto" }}>
+                Log out
+              </button>
               <button className="btn-new" onClick={() => navigate("/notes/new")}>
                 + New note
               </button>
-            )}
-          </div>
-        ) : (
-          <div className="note-grid">
-            {filteredNotes.map((note, i) => (
-              <button
-                key={note.id}
-                className={`note-card note-card--${STICKY_COLORS[i % STICKY_COLORS.length]}`}
-                onClick={() => navigate(`/notes/${note.id}`)}
-              >
-                <button className="delete-btn" onClick={(e) => handleDelete(e, note.id)} title="Delete note">
-                  ✕
-                </button>
-                <h3>{note.title}</h3>
-                <p>{excerpt(note.content) || "Empty note"}</p>
-                <div className="note-meta">Edited {formatDate(note.updatedAt)}</div>
+            </>
+          ) : (
+            <>
+              <div className="topbar-spacer" />
+              <button onClick={handleLogout} className="nav-item" style={{ width: "auto" }}>
+                Log out
               </button>
-            ))}
-          </div>
+            </>
+          )}
+        </div>
+
+        {view === "profile" ? (
+          <ProfilePanel user={user} />
+        ) : (
+          <>
+            <div className="main-head">
+              <p className="eyebrow">
+                {greeting()}, {user?.name}
+              </p>
+              <h2>Your notes</h2>
+              <p className="note-count">{notes.length} notes</p>
+            </div>
+
+            {notesArea}
+          </>
         )}
       </div>
     </div>

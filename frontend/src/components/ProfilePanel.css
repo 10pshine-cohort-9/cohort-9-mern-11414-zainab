@@ -1,0 +1,78 @@
+.profile-panel {
+  max-width: 480px;
+}
+
+.profile-card {
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.profile-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-row span:first-child {
+  color: var(--ink-500);
+}
+
+.profile-field {
+  margin-bottom: 14px;
+}
+
+.profile-field label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-500);
+  margin-bottom: 6px;
+}
+
+.profile-field input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.92rem;
+  background: var(--paper);
+  color: var(--ink-900);
+  outline: none;
+}
+
+.profile-field input:focus {
+  border-color: var(--accent);
+}
+
+.profile-error {
+  /* Same color pair as .auth-error in Auth.css, which SonarCloud has
+     never flagged — reusing a proven-passing pair instead of a new one. */
+  background: #fbe7e1;
+  color: #92351f;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+
+.profile-success {
+  background: rgba(111, 182, 222, 0.15);
+  color: var(--accent-ink);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}

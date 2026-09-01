@@ -82,6 +82,10 @@
   margin-bottom: 30px;
 }
 
+.topbar-spacer {
+  flex: 1;
+}
+
 .search-box {
   flex: 1;
   display: flex;
