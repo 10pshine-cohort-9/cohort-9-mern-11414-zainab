@@ -10,9 +10,14 @@ jest.mock("../utils/api", () => ({
 const mockedGet = api.get as jest.Mock
 const mockedPut = api.put as jest.Mock
 
-function setupMocks() {
+const SAMPLE_NOTES = [
+  { id: 1, title: "Groceries", content: "<p>Milk and eggs</p>", updatedAt: "2026-01-10T00:00:00Z" },
+  { id: 2, title: "Meeting notes", content: "<p>Discuss roadmap</p>", updatedAt: "2026-01-11T00:00:00Z" },
+]
+
+function setupMocks(notes: typeof SAMPLE_NOTES = []) {
   mockedGet.mockImplementation((url: string) => {
-    if (url === "/notes") return Promise.resolve({ data: { notes: [] } })
+    if (url === "/notes") return Promise.resolve({ data: { notes } })
     if (url === "/auth/profile") {
       return Promise.resolve({
         data: { user: { id: 1, name: "Ada", email: "ada@example.com", createdAt: "2026-01-15T00:00:00Z" } },
@@ -121,5 +126,82 @@ describe("Dashboard profile view toggle", () => {
       currentPassword: "secret123",
       newPassword: "newpass123",
     })
+  })
+})
+
+describe("Dashboard search/filter", () => {
+  it("shows all notes when the search box is empty", async () => {
+    setupMocks(SAMPLE_NOTES)
+    renderDashboard()
+    expect(await screen.findByText("Groceries")).toBeInTheDocument()
+    expect(screen.getByText("Meeting notes")).toBeInTheDocument()
+  })
+
+  it("filters notes by title", async () => {
+    setupMocks(SAMPLE_NOTES)
+    renderDashboard()
+    await screen.findByText("Groceries")
+
+    fireEvent.change(screen.getByPlaceholderText("Search notes"), { target: { value: "grocer" } })
+
+    expect(screen.getByText("Groceries")).toBeInTheDocument()
+    expect(screen.queryByText("Meeting notes")).not.toBeInTheDocument()
+  })
+
+  it("filters notes by content, case-insensitively", async () => {
+    setupMocks(SAMPLE_NOTES)
+    renderDashboard()
+    await screen.findByText("Groceries")
+
+    fireEvent.change(screen.getByPlaceholderText("Search notes"), { target: { value: "ROADMAP" } })
+
+    expect(screen.getByText("Meeting notes")).toBeInTheDocument()
+    expect(screen.queryByText("Groceries")).not.toBeInTheDocument()
+  })
+
+  it("shows a no-match message when nothing matches the search", async () => {
+    setupMocks(SAMPLE_NOTES)
+    renderDashboard()
+    await screen.findByText("Groceries")
+
+    fireEvent.change(screen.getByPlaceholderText("Search notes"), { target: { value: "nonexistent" } })
+
+    expect(await screen.findByText("No notes match your search.")).toBeInTheDocument()
+  })
+})
+
+describe("Dashboard note deletion", () => {
+  const originalConfirm = window.confirm
+
+  afterEach(() => {
+    window.confirm = originalConfirm
+  })
+
+  it("deletes a note when the user confirms", async () => {
+    setupMocks(SAMPLE_NOTES)
+    window.confirm = jest.fn(() => true)
+    const deleteMock = api.delete as jest.Mock
+    deleteMock.mockResolvedValue({})
+    renderDashboard()
+    await screen.findByText("Groceries")
+
+    fireEvent.click(screen.getAllByTitle("Delete note")[0])
+
+    await waitFor(() => expect(deleteMock).toHaveBeenCalledWith("/notes/1"))
+    expect(screen.queryByText("Groceries")).not.toBeInTheDocument()
+  })
+
+  it("does not delete when the user cancels the confirmation", async () => {
+    setupMocks(SAMPLE_NOTES)
+    window.confirm = jest.fn(() => false)
+    const deleteMock = api.delete as jest.Mock
+    deleteMock.mockClear()
+    renderDashboard()
+    await screen.findByText("Groceries")
+
+    fireEvent.click(screen.getAllByTitle("Delete note")[0])
+
+    expect(deleteMock).not.toHaveBeenCalled()
+    expect(screen.getByText("Groceries")).toBeInTheDocument()
   })
 })
