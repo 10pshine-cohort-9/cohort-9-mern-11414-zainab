@@ -78,6 +78,7 @@ and per-user data isolation. Built as a 10 Pearls internship project.
 | POST | `/api/auth/signup` | — | Register (`name`, `email`, `password`) |
 | POST | `/api/auth/login` | — | Log in (`email`, `password`) |
 | GET | `/api/auth/profile` | ✓ | Get the current user |
+| PUT | `/api/auth/password` | ✓ | Change password (`currentPassword`, `newPassword`) |
 | GET | `/api/notes` | ✓ | List the current user's notes |
 | POST | `/api/notes` | ✓ | Create a note (`title`, `content`) |
 | GET | `/api/notes/:id` | ✓ | Get a single note |
@@ -118,8 +119,8 @@ Backend runs on `http://localhost:8000`, frontend dev server on `http://localhos
 ### Testing
 
 ```bash
-cd backend && npm test    # Mocha/Chai — 12/12 passing
-cd frontend && npm test   # Jest — 14/14 passing
+cd backend && npm test    # Mocha/Chai — 17/17 passing
+cd frontend && npm test   # Jest — 20/20 passing
 ```
 
 ### Code Quality
@@ -130,8 +131,15 @@ current report.
 
 ## Status
 
-Core app (auth, notes CRUD, rich text, logging, exception handling,
-MySQL — verified live) is merged. Additional work — a checklist/to-do
-note format, an inline profile panel with change-password support, and
-CORS/security hardening — is complete and passing tests, currently in
-open pull requests awaiting review.
+All core and additional requirements are merged: auth, notes CRUD, rich
+text, logging, exception handling, MySQL (verified live), the inline
+profile panel with change-password support, CORS/security hardening,
+and SonarCloud integration. One optional enhancement — a checklist/
+to-do note format — is complete, tested, and passing, currently in an
+open pull request awaiting review.
+
+**Known gaps, disclosed rather than hidden:** the backend doesn't have
+a separate service/data-access layer (controllers call Sequelize models
+directly), so tests cover controller logic rather than three distinct
+layers. A couple of pages (`Auth`, `NoteEditor`, `ProfilePanel`) don't
+have their own responsive breakpoints yet, unlike the dashboard.
